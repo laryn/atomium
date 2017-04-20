@@ -35,10 +35,7 @@ before_script:
   - cd web
   - ../vendor/bin/drush si standard -y --db-url=mysql://travis:@127.0.0.1/drupal
   # Test latest commit on current branch.
-  - git clone https://github.com/$TRAVIS_REPO_SLUG.git sites/all/themes/atomium
-  - cd sites/all/themes/atomium
-  - git checkout $TRAVIS_COMMIT
-  - "cd -"
+  - git clone --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git sites/all/themes/atomium
   - ../vendor/bin/drush en atomium -y
   - ../vendor/bin/drush vset theme_default atomium
   - ../vendor/bin/drush dis overlay update -y
