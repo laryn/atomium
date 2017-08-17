@@ -49,8 +49,7 @@ function atomium_preprocess_link(&$variables, $hook) {
     $variables['attributes_array']['class'][] = 'active';
   }
 
-  $variables['attributes_array']['href'] = (strpos($variables['path'], '#') === 0) ? $variables['path'] : $path;
-  $variables['attributes_array']['href'] = (strpos($variables['path'], 'javascript:') === 0) ? $variables['path'] : $path;
+  $variables['attributes_array']['href'] = (strpos($variables['path'], '#') === 0) || (strpos($variables['path'], 'javascript:') === 0) ? $variables['path'] : $path;
 
   if (is_string($variables['text'])) {
     $variables['text'] = array(
