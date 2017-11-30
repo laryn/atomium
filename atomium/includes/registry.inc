@@ -224,6 +224,10 @@ function _atomium_process_theme_registry(array &$registry, $themes) {
         // Correct the type that is implementing this override.
         $registry[$hook]['type'] = $GLOBALS['theme_path'] === $registry[$hook]['theme path'] ? 'theme' : 'base_theme';
 
+        $registry[$hook] += array(
+          $phase_key => array(),
+        );
+
         // Sort the phase functions.
         // @see https://www.drupal.org/node/2098551
         _atomium_registry_sort_phase_functions($registry[$hook][$phase_key], $hook, $phase, $themes);

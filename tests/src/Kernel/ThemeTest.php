@@ -28,7 +28,7 @@ class ThemeTest extends AbstractThemeTest {
    */
   public function testThemeAttributes($attributes) {
     foreach ($attributes as $attribute) {
-      expect(atomium_drupal_attributes($attribute['actual']))->to->equal($attribute['expected']);
+      expect(atomium_backdrop_attributes($attribute['actual']))->to->equal($attribute['expected']);
     }
   }
 

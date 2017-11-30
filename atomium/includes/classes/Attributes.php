@@ -320,7 +320,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    * {@inheritdoc}
    */
   public function __toString() {
-    return atomium_drupal_attributes($this->storage);
+    return atomium_backdrop_attributes($this->storage);
   }
 
   /**

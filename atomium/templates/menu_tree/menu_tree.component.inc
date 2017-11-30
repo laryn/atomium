@@ -35,4 +35,8 @@ function atomium_preprocess_menu_tree(&$variables, $hook) {
 
   $variables['atomium']['attributes']['wrapper']
     ->append('class', 'menu_tree-level-' . $variables['depth']);
+
+  // @Todo: backport this to 7.x-2.x
+  $variables['atomium']['attributes']['wrapper']
+    ->merge($variables['attributes']);
 }

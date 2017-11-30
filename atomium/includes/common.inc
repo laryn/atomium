@@ -217,7 +217,7 @@ function &_atomium_get_attributes(array &$element, $property = 'attributes') {
  * @return string
  *   The attributes in a single string, cleaned.
  */
-function atomium_drupal_attributes(array $attributes = array(), $name = NULL, $hook = NULL) {
+function atomium_backdrop_attributes(array $attributes = array(), $name = NULL, $hook = NULL) {
   // Remove empty arrays and empty strings.
   $attributes = array_filter($attributes, function ($value) {
     if (!is_array($value)) {

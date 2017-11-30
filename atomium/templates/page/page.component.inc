@@ -75,5 +75,7 @@ function atomium_preprocess_page(&$variables, $hook) {
     ),
   );
 
-  unset($variables['page']['content']['#theme_wrappers']);
+  $variables['atomium']['attributes']['body']->append('class', $variables['classes']);
+  $variables['atomium']['attributes']['html']->merge($variables['html_attributes']);
+  $variables['atomium']['attributes']['body']->merge($variables['body_attributes']);
 }
