@@ -6,6 +6,7 @@ parameters:
       standard: vendor/ec-europa/qa-automation/phpcs/SubStandards/QA
       ignore_patterns:
         - vendor/
+        - RoboFile.php
       triggered_by:
         - php
         - module
