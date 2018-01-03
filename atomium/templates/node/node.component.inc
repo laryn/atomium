@@ -51,7 +51,7 @@ function atomium_preprocess_node(&$variables, $hook) {
   $variables['classes_array'] = array_values(
     array_diff(
       $variables['classes_array'],
-      array('node', 'node-sticky', 'node-unpublished', 'node-promoted')
+      atomium_get_settings('preprocess.node.classes_to_remove', TRUE)
     )
   );
 
