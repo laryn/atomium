@@ -77,5 +77,8 @@ settings[alter][field_attach_view_alter][keys] = field_type,formatter,field_name
 
 ; Preprocess configuration
 ; ------------------------
+settings[preprocess][block][classes_to_remove] = block
+settings[preprocess][html][classes_to_remove] = two-sidebars,one-sidebar,sidebar-first,sidebar-second,no-sidebars,toolbar,toolbar-drawer
 settings[preprocess][node][classes_to_remove] = node,node-sticky,node-unpublished,node-promoted
+settings[preprocess][region][classes_to_remove] = region
 

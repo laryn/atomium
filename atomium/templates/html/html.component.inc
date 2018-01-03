@@ -82,12 +82,12 @@ function atomium_preprocess_html(&$variables, $hook) {
     }
   }
 
-  $variables['classes_array'] = array_values(array_diff($variables['classes_array'], array('two-sidebars')));
-  $variables['classes_array'] = array_values(array_diff($variables['classes_array'], array('one-sidebar sidebar-first')));
-  $variables['classes_array'] = array_values(array_diff($variables['classes_array'], array('one-sidebar sidebar-second')));
-  $variables['classes_array'] = array_values(array_diff($variables['classes_array'], array('no-sidebars')));
-  $variables['classes_array'] = array_values(array_diff($variables['classes_array'], array('toolbar')));
-  $variables['classes_array'] = array_values(array_diff($variables['classes_array'], array('toolbar-drawer')));
+  $variables['classes_array'] = array_values(
+    array_diff(
+      $variables['classes_array'],
+      atomium_get_settings('preprocess.html.classes_to_remove', TRUE)
+    )
+  );
 
   $headers = drupal_get_http_header();
   if (isset($headers['status'])) {
