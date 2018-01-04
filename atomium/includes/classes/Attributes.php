@@ -60,7 +60,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
       $value = explode(' ', $value);
     }
 
-    $value = array_map(function($val) {
+    $value = array_map(function ($val) {
       return explode(' ', $val);
     }, $value);
 
@@ -155,7 +155,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
       $value = explode(' ', $value);
     }
 
-    $value = array_map(function($val) {
+    $value = array_map(function ($val) {
       return explode(' ', $val);
     }, $value);
 

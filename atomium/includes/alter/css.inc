@@ -23,7 +23,7 @@ function atomium_css_alter(&$css) {
   }
 
   // Exclude specified CSS files from theme.
-  $excludes = atomium_get_settings('exclude.css', FALSE);
+  $excludes = atomium_get_settings('alter.css_alter.exclude', FALSE);
 
   if (!empty($excludes)) {
     $excludes = array_merge($excludes, str_replace('.css', '-rtl.css', $excludes));

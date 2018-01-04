@@ -790,14 +790,12 @@ function _atomium_array_flatten(array $array, array &$storage, $parentKey = '') 
 function atomium_get_settings($setting_keys, $base_themes = TRUE, array $value_callbacks = array('trim')) {
   $theme_key = $GLOBALS['theme_key'];
 
-  $settings = &drupal_static(__FUNCTION__, array());
+  $settings = array();
 
-  if (empty($settings)) {
-    _atomium_array_flatten(
-      atomium_get_theme_info($theme_key, 'settings', $base_themes),
-      $settings
-    );
-  }
+  _atomium_array_flatten(
+    atomium_get_theme_info($theme_key, 'settings', $base_themes),
+    $settings
+  );
 
   $setting_value = array();
 
