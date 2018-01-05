@@ -9,14 +9,18 @@ drupal:
     password: ""
   settings:
     conf:
-      theme_default: atomium
+      theme_default: "atomium"
       file_scan_ignore_directories:
-        - node_modules
-        - bower_components
-        - build
-        - vendor
-        - sites/all/themes/atomium/build
-        - build/sites/all/themes/atomium/build
+        - "node_modules"
+        - "bower_components"
+        - "build"
+        - "vendor"
+        - "sites/all/themes/atomium/build"
+        - "build/sites/all/themes/atomium/build"
   post_install:
-      - ./vendor/bin/drush --root=$(pwd)/build en -y atomium devel realistic_dummy_content composer_autoloader
-      - ./vendor/bin/drush --root=$(pwd)/build dis -y overlay update help comment rdf search
+      - "./vendor/bin/drush --root=$(pwd)/build en -y atomium devel realistic_dummy_content composer_autoloader"
+      - "./vendor/bin/drush --root=$(pwd)/build dis -y overlay update help comment rdf search"
+
+atomium:
+  reference:
+    tag: "7.x-2.3"
