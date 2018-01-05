@@ -41,6 +41,7 @@
   },
   "autoload": {
     "psr-4": {
+      "Drupal\\atomium\\": "./src/",
       "Drupal\\Tests\\atomium\\": "./tests/src/"
     }
   },
