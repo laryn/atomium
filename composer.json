@@ -36,7 +36,8 @@
     "nuvoleweb/robo-config": "~0.1",
     "drupal/drupal-extension": "~3.4",
     "drupal/realistic_dummy_content": "*",
-    "drupal/devel": "*"
+    "drupal/devel": "*",
+    "ec-europa/oe-task-runner": "dev-master"
   },
   "autoload": {
     "psr-4": {
@@ -50,8 +51,8 @@
     }
   ],
   "scripts": {
-    "post-update-cmd": "./vendor/bin/robo project:setup",
-    "post-install-cmd": "./vendor/bin/robo project:setup",
+    "post-update-cmd": "./vendor/bin/run drupal:component-scaffold",
+    "post-install-cmd": "./vendor/bin/run drupal:component-scaffold",
     "grumphp": "./vendor/bin/grumphp run"
   },
   "extra": {
