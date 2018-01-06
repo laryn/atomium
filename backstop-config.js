@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 module.exports = {
     "id": "test",
     "viewports": [

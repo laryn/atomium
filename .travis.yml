@@ -1,55 +1,45 @@
 dist: precise
 
-language: php
-
-git:
-  depth: 10000
-
-php:
-  - 5.6
-  - 7.1
-  - 7.2
-
-env:
-  global:
-    - PATH=$PATH:/home/travis/.composer/vendor/bin:$TRAVIS_BUILD_DIR/vendor/bin
+services:
+  - docker
 
 install:
-  - composer self-update
-  - composer install
+  - docker-compose up -d
 
 before_script:
-  # Set sendmail so drush doesn't throw an error during site install.
-  - echo "sendmail_path=`which true`" >> `php --ini | grep "Loaded Configuration" | awk '{print $4}'`
-  - run drupal:site-install
-  - drush --root=$PWD/build --debug runserver :8888 > ~/debug.txt 2>&1 &
-  - sleep 4s
+  - docker-compose exec web composer install
+  - docker-compose exec web ./vendor/bin/run drupal:site-install
+  - docker-compose exec web ./vendor/bin/run atomium:build-reference
+  - docker-compose exec web ./vendor/bin/run atomium:install-reference
+  - docker-compose exec web php -S 0.0.0.0:8888 -t build &
+  - docker-compose exec web php -S 0.0.0.0:8889 -t tests/reference/build &
 
 script:
-  - ./vendor/bin/grumphp run
+  - docker-compose exec web ./vendor/bin/grumphp run
 
-after_success:
-  - cd $TRAVIS_BUILD_DIR/test-site/web
-  - drush dl zen mothership bootstrap
-  - ../vendor/bin/drush vset theme_default bartik
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush vset theme_default zen
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush vset theme_default mothership
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush vset theme_default atomium
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush en realistic_dummy_content devel -y
-  - ../vendor/bin/drush en devel_generate -y
-  - ../vendor/bin/drush generate-content 50
-  - ../vendor/bin/drush vset theme_default bartik
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush vset theme_default zen
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush vset theme_default mothership
-  - ab -n 500 -kc 10 http://127.0.0.1/
-  - ../vendor/bin/drush vset theme_default atomium
-  - ab -n 500 -kc 10 http://127.0.0.1/
+# @todo: Run this in Docker container.
+#after_success:
+#  - cd $TRAVIS_BUILD_DIR/test-site/web
+#  - drush dl zen mothership bootstrap
+#  - ../vendor/bin/drush vset theme_default bartik
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush vset theme_default zen
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush vset theme_default mothership
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush vset theme_default atomium
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush en realistic_dummy_content devel -y
+#  - ../vendor/bin/drush en devel_generate -y
+#  - ../vendor/bin/drush generate-content 50
+#  - ../vendor/bin/drush vset theme_default bartik
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush vset theme_default zen
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush vset theme_default mothership
+#  - ab -n 500 -kc 10 http://127.0.0.1/
+#  - ../vendor/bin/drush vset theme_default atomium
+#  - ab -n 500 -kc 10 http://127.0.0.1/
 
 notifications:
   email: false

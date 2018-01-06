@@ -12,21 +12,31 @@ use EC\OpenEuropa\TaskRunner\Commands\BaseCommands;
 class VisualRegressionCommands extends BaseCommands {
 
   /**
-   * Test command.
+   * Build reference site.
    *
    * @command atomium:build-reference
    */
   public function buildReference() {
     $collection = $this->collectionBuilder();
+    $directory = $this->getConfig()->get('atomium.reference.root');
+    $repository = $this->getConfig()->get('atomium.repository');
 
     $collection->addTaskList([
-      $this->taskFilesystemStack()->remove('tests/reference'),
-      $this->taskGitStack()->cloneShallow('https://github.com/ec-europa/atomium.git', 'tests/reference'),
-      $this->taskComposerInstall()->workingDir('./tests/reference'),
-      $this->taskExec('./vendor/bin/run dsi --root=tests/reference/build --database-name=reference'),
+      $this->taskFilesystemStack()->remove($directory),
+      $this->taskGitStack()->cloneShallow($repository, $directory),
+      $this->taskComposerInstall()->workingDir($directory),
     ]);
 
     return $collection;
+  }
+
+  /**
+   * Install reference site.
+   *
+   * @command atomium:install-reference
+   */
+  public function installReference() {
+    return $this->taskExec('./vendor/bin/run dsi --root=tests/reference/build --database-name=reference');
   }
 
 }
