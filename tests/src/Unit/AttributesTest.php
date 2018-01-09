@@ -11,23 +11,31 @@ use Symfony\Component\Yaml\Yaml;
  * @package Drupal\Tests\atomium
  */
 class AttributesTest extends AbstractUnitTest {
-
   /**
    * Test class methods.
    *
    * @dataProvider methodsProvider
    */
-  public function testMethods(array $given, array $run, array $expect) {
+  public function testMethods(array $given, array $runs, array $expects) {
     $attributes = new Attributes($given);
 
-    foreach ($run as $method => $arguments) {
-      call_user_func_array(array($attributes, $method), $arguments);
+    foreach ($runs as $run) {
+      foreach ($run as $method => $arguments) {
+        call_user_func_array([$attributes, $method], $arguments);
+      }
     }
 
-    foreach ($expect as $method => $item) {
-      $item += array('arguments' => array());
-      $actual = call_user_func_array(array($attributes, $method), $item['arguments']);
-      expect($actual)->to->equal($item['return']);
+    foreach ($expects as $expect) {
+      foreach ($expect as $method => $item) {
+        $item += array('arguments' => array());
+
+        $actual = call_user_func_array(
+          array($attributes, $method),
+          $item['arguments']
+        );
+
+        expect($actual)->to->equal($item['return']);
+      }
     }
   }
 

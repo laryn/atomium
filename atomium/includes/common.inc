@@ -218,14 +218,6 @@ function &_atomium_get_attributes(array &$element, $property = 'attributes') {
  *   The attributes in a single string, cleaned.
  */
 function atomium_drupal_attributes(array $attributes = array(), $name = NULL, $hook = NULL) {
-  // Remove empty arrays and empty strings.
-  $attributes = array_filter($attributes, function ($value) {
-    if (!is_array($value)) {
-      return (drupal_strlen($value) != 0);
-    }
-    return $value;
-  });
-
   // If empty, just return an empty string.
   if (empty($attributes)) {
     return '';
@@ -291,8 +283,10 @@ function _atomium_clean_attributes(array $attributes = array(), $name = NULL, $h
 
     // If the attribute is numeric, just display the value.
     // Ex: 0="data-closable" will be displayed: data-closable.
-    if (!is_numeric($attribute)) {
+    if (!is_numeric($attribute) && !is_bool($raw_data)) {
       $data = sprintf('%s="%s"', $attribute, $data);
+    } else {
+      $data = sprintf('%s', $attribute);
     }
 
     $raw_data = $data;

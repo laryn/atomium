@@ -27,6 +27,8 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    *
    * @param array|Attributes $attributes
    *   The attributes.
+   *
+   * @return $this
    */
   public function attributes($attributes = array()) {
     if ($attributes instanceof Attributes) {
@@ -35,7 +37,11 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
     }
 
     foreach ($attributes as $name => $value) {
-      $this->offsetSet($name, $value);
+      if (is_numeric($name)) {
+        $this->offsetSet($value);
+      } else {
+        $this->offsetSet($name, $value);
+      }
     }
 
     return $this;
@@ -47,24 +53,29 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
   public function &offsetGet($name) {
     $this->storage += array($name => array());
 
-    return $this->storage[$name];
+    return array_values($this->storage[$name]);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function offsetSet($name, $value) {
+  public function offsetSet($name, $value = FALSE) {
     $this->storage += array($name => array());
 
-    if (!is_array($value)) {
-      $value = explode(' ', $value);
+    if (is_bool($value)) {
+      $data = $value;
     }
+    else {
+      $value_iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator((array) $value));
 
-    $value_iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($value));
+      $data = array();
 
-    $data = array();
-    foreach (iterator_to_array($value_iterator, FALSE) as $item) {
-      $data[] = trim($item);
+      foreach ($value_iterator as $item) {
+        $data = array_merge($data, explode(' ', $item));
+      }
+
+      $data = array_values(array_filter($data));
+      $data = array_combine($data, $data);
     }
 
     $this->storage[$name] = $data;
@@ -89,12 +100,12 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    *
    * @param string $attribute
    *   Name of the attribute.
-   * @param string|array $value
+   * @param string|array|bool $value
    *   Value(s) to set for the given attribute key.
    *
    * @return $this
    */
-  public function setAttribute($attribute, $value) {
+  public function setAttribute($attribute, $value = FALSE) {
     $this->offsetSet($attribute, $value);
 
     return $this;
@@ -130,30 +141,33 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    *
    * @param string $key
    *   The attribute's name.
-   * @param string|array $value
+   * @param string|array|bool $value
    *   The attribute's value.
    *
    * @return $this
    */
-  public function append($key, $value) {
-    if (empty($value) || empty($key)) {
+  public function append($key, $value = FALSE) {
+    $attributes = $this->storage;
+
+    if (is_bool($value)) {
+      $attributes[$key] = $value;
+      $this->storage = $attributes;
+    }
+
+    if (empty($value) || empty($key) || is_bool($value)) {
       return $this;
     }
 
-    $attributes = $this->storage;
     $attributes += array($key => array());
 
-    if (!is_array($attributes[$key])) {
-      $attributes[$key] = array($attributes[$key]);
+    $value_iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator((array) $value));
+
+    $data = array();
+    foreach ($value_iterator as $item) {
+      $data = array_merge($data, explode(' ', $item));
     }
 
-    if (!is_array($value)) {
-      $value = explode(' ', $value);
-    }
-
-    foreach ($value as $item) {
-      $attributes[$key][] = trim($item);
-    }
+    $attributes[$key] = array_merge((array) $attributes[$key], array_values(array_filter($data)));
 
     $this->storage = $attributes;
 
@@ -165,23 +179,27 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    *
    * @param string $key
    *   The attribute's name.
-   * @param string|array $value
+   * @param string|array|bool $value
    *   The attribute's value.
    *
    * @return $this
    */
-  public function remove($key, $value) {
+  public function remove($key, $value = FALSE) {
     $attributes = $this->storage;
 
     if (!isset($attributes[$key])) {
       return $this;
     }
 
-    if (!is_array($value)) {
-      $value = explode(' ', $value);
-    }
+    if (is_bool($value)) {
+      unset($attributes[$key]);
+    } else {
+      if (!is_array($value)) {
+        $value = explode(' ', $value);
+      }
 
-    $attributes[$key] = array_values(array_diff($attributes[$key], $value));
+      $attributes[$key] = array_values(array_diff($attributes[$key], $value));
+    }
 
     $this->storage = $attributes;
 
@@ -320,7 +338,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    * {@inheritdoc}
    */
   public function __toString() {
-    return atomium_drupal_attributes($this->storage);
+    return atomium_drupal_attributes($this->storage());
   }
 
   /**
@@ -333,7 +351,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
     $return = array();
 
     foreach ($this->storage as $name => $value) {
-      $return[$name] = $value;
+      $return[$name] = array_values($value);
     }
 
     return $return;
