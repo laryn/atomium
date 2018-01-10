@@ -11,6 +11,7 @@ use Symfony\Component\Yaml\Yaml;
  * @package Drupal\Tests\atomium
  */
 class AttributesTest extends AbstractUnitTest {
+
   /**
    * Test class methods.
    *

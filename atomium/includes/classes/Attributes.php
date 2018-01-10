@@ -19,7 +19,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    * {@inheritdoc}
    */
   public function __construct(array $attributes = array()) {
-    $this->attributes($attributes);
+    $this->setAttributes($attributes);
   }
 
   /**
@@ -30,7 +30,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    *
    * @return $this
    */
-  public function attributes($attributes = array()) {
+  public function setAttributes($attributes = array()) {
     if ($attributes instanceof Attributes) {
       $this->storage = $attributes->toArray();
       $attributes = array();
@@ -39,7 +39,8 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
     foreach ($attributes as $name => $value) {
       if (is_numeric($name)) {
         $this->offsetSet($value);
-      } else {
+      }
+      else {
         $this->offsetSet($name, $value);
       }
     }
@@ -193,7 +194,8 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
 
     if (is_bool($value)) {
       unset($attributes[$key]);
-    } else {
+    }
+    else {
       if (!is_array($value)) {
         $value = explode(' ', $value);
       }
