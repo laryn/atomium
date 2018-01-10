@@ -340,7 +340,50 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    * {@inheritdoc}
    */
   public function __toString() {
-    return atomium_drupal_attributes($this->storage());
+    $attributes = $this->storage();
+
+    // If empty, just return an empty string.
+    if (empty($attributes)) {
+      return '';
+    }
+
+    foreach ($attributes as $attribute => &$data) {
+      if (is_numeric($attribute) || is_bool($data)) {
+        $data = sprintf('%s', $attribute);
+      }
+      else {
+        $data = array_map(function ($item) use ($attribute) {
+          if ('placeholder' === $attribute) {
+            $item = strip_tags($item);
+          }
+
+          /*
+           * @todo: Disabled for now, it's causing issue in
+           * @todo: admin/structure/views/settings.
+           *
+           * if ('id' === $attribute) {
+           *   $item = drupal_html_id($item);.
+           * }
+           */
+
+          return trim(check_plain($item));
+        }, (array) $data);
+
+        // By default, sort the value of the class attribute.
+        if ('class' === $attribute) {
+          asort($data);
+        }
+
+        // If the attribute is numeric, just display the value.
+        // Ex: 0="data-closable" will be displayed: data-closable.
+        $data = sprintf('%s="%s"', $attribute, implode(' ', $data));
+      }
+    }
+
+    // Sort the attributes.
+    asort($attributes);
+
+    return $attributes ? ' ' . implode(' ', $attributes) : '';
   }
 
   /**
@@ -352,7 +395,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
   public function toArray() {
     $return = array();
 
-    foreach ($this->storage as $name => $value) {
+    foreach ($this->storage() as $name => $value) {
       $return[$name] = array_values($value);
     }
 
@@ -363,7 +406,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
    * {@inheritdoc}
    */
   public function getIterator() {
-    return new \ArrayIterator($this->storage);
+    return new \ArrayIterator($this->storage());
   }
 
   /**
