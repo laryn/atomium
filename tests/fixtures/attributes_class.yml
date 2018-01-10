@@ -87,11 +87,11 @@
 -
   given: []
   run:
-    - append: ['data-closable']
+    - append: ['data-closable ']
   expect:
     - toArray:
         return:
-          data-closable: null
+          'data-closable ': null
     - __toString:
         return: ' data-closable'
 

@@ -349,7 +349,7 @@ class Attributes implements \ArrayAccess, \IteratorAggregate {
 
     foreach ($attributes as $attribute => &$data) {
       if (is_numeric($attribute) || is_bool($data)) {
-        $data = sprintf('%s', $attribute);
+        $data = sprintf('%s', trim(check_plain($attribute)));
       }
       else {
         $data = array_map(function ($item) use ($attribute) {
