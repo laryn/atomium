@@ -35,7 +35,6 @@
 
   <?php if ($display_submitted): ?>
       <footer>
-        <?php print $user_picture; ?>
           <span class="author"><?php print t('Written by !name', array('!name' => render($name))); ?></span>
           <span class="date">
             <?php print t('On the'); ?>
@@ -43,11 +42,6 @@
                 $type = 'custom',
                 $format = 'Y-m-d\TH:i:sP') ?>"><?php print $date; ?></time>
           </span>
-
-        <?php if (module_exists('comment')): ?>
-            <span class="comments"><?php print $comment_count; ?>
-                Comments</span>
-        <?php endif; ?>
       </footer>
   <?php endif; ?>
 
