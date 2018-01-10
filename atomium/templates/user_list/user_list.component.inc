@@ -16,7 +16,7 @@ function atomium_preprocess_user_list(&$variables, $hook) {
     $variables[$hook] = array(
       $hook => array(
         '#theme' => 'item_list__' . $variables['theme_hook_original'],
-        '#items' => array_map(function($user) use ($variables) {
+        '#items' => array_map(function ($user) use ($variables) {
           return array(
             'data' => array(
               '#theme' => 'username__' . $variables['theme_hook_original'],
@@ -28,6 +28,4 @@ function atomium_preprocess_user_list(&$variables, $hook) {
       ),
     );
   }
-
 }
-
