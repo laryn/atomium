@@ -283,10 +283,11 @@ function _atomium_clean_attributes(array $attributes = array(), $name = NULL, $h
 
     // If the attribute is numeric, just display the value.
     // Ex: 0="data-closable" will be displayed: data-closable.
-    if (!is_numeric($attribute) && !is_bool($raw_data)) {
-      $data = sprintf('%s="%s"', $attribute, $data);
-    } else {
+    if (is_numeric($attribute) || is_bool($raw_data)) {
       $data = sprintf('%s', $attribute);
+    }
+    else {
+      $data = sprintf('%s="%s"', $attribute, $data);
     }
 
     $raw_data = $data;
